@@ -1,0 +1,400 @@
+
+/* 🎨 style.css */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Montserrat", sans-serif;
+  background: #005f4e;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==================== PANTALLA DE CARGA ==================== */
+.loading-screen {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background: url("assets/fondo.png") no-repeat center center/cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.progress-container {
+  width: 90%;
+  max-width: 400px;
+  height: 19px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+
+.progress-bar {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: transparent;
+  border-radius: 30px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-image: linear-gradient(90deg, #177d6a 0%, #1fb9a3 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  /* 💡 flecha real */
+  clip-path: polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%);
+  transition: width 0.1s linear;
+}
+.progress-bubble {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.percentage {
+  font-size: 14px;
+  font-weight: bold;
+  color: #00ffd0;
+  text-shadow: 0 0 4px #00ffd0;
+}
+
+
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  bottom: 100px; /* ⬅️ antes era 180px. Disminuí para que se acerque al borde inferior */
+  left: 0;
+  right: 0;
+  transform: scale(1); /* ⬅️ escala normal */
+  margin-top: 0;
+}
+
+.tridente {
+  height: 130px; /* ⬆️ antes era 100px */
+}
+
+.atlantis {
+  height: 80px;   /* ⬆️ antes era 60px */
+  margin-top: -40px; /* mantiene la superposición, ajustá si hace falta */
+}
+
+/* ==================== PANTALLA DE JUEGO ==================== */
+.game-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url("assets/bg-mesa.png") no-repeat center center;
+  background-size: cover;
+}
+
+.ruleta-wrapper {
+  position: relative;
+  width: 90vw;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+#ruleta {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: rotate(0deg);
+  transition: transform 5s ease-out;
+
+  /* 💎 Estética mejorada */
+  border-radius: 50%;
+  box-shadow:
+    0 0 15px rgba(0, 255, 208, 0.6),
+    0 0 25px rgba(0, 255, 208, 0.3),
+    0 0 45px rgba(0, 199, 128, 0.3);
+  filter: drop-shadow(0 0 6px #00ffd0);
+}
+
+.puntero {
+  position: absolute;
+  top: -0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15%;
+  max-width: 60px;
+  pointer-events: none;
+  z-index: 10;
+
+  /* Estilo visual adicional */
+  filter: drop-shadow(0 0 8px #00ffd0) drop-shadow(0 0 16px #00c780);
+  transition: filter 0.3s ease;
+}
+
+/* Opción adicional si querés que palpite (sólo visual) */
+@keyframes punteroPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px #00ffd0);
+  }
+  50% {
+    filter: drop-shadow(0 0 14px #00ffd0) drop-shadow(0 0 22px #00c780);
+  }
+}
+
+.puntero.animado {
+  animation: punteroPulse 2s infinite;
+}
+
+
+#girar-btn {
+  margin-top: 30px;
+  padding: 14px 36px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(to bottom, #00ffd0, #00c780);
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 208, 0.6), 0 4px 15px rgba(0, 199, 128, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+#girar-btn:hover {
+  background: linear-gradient(to bottom, #00c780, #00ffd0);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ffd0, 0 0 30px rgba(0, 255, 208, 0.5);
+}
+
+
+/* ==================== MEDIA QUERIES ==================== */
+@media screen and (max-width: 400px) {
+  .ruleta-wrapper {
+    max-width: 300px;
+  }
+
+  .puntero {
+    top: -0px;
+    width: 15%;
+  }
+
+  #girar-btn {
+    font-size: 1rem;
+    padding: 12px 28px;
+    margin-top: 24px;
+  }
+
+  .tridente {
+    height: 80px;
+  }
+
+  .atlantis {
+    height: 50px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .popup {
+    padding: 24px 28px;
+    max-width: 280px;
+  }
+}
+
+/* ==================== POPUP DE PREMIO ==================== */
+
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-container.hidden {
+  display: none;
+}
+
+.popup {
+  position: relative;
+  background: radial-gradient(circle at center, #002822 0%, #000 100%);
+  border: 6px solid #00ffd0;
+  border-radius: 25px;
+  padding: 30px 40px;
+  width: 90%;
+  max-width: 220px;  /* 📏 Nuevo tamaño máximo */
+  box-shadow: 0 0 40px #00ffd0;
+  color: white;
+  text-align: center;
+  animation: popupEntrada 0.5s ease-out, popupPulse 1.5s ease-in-out infinite;
+}
+
+
+.popup h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.popup h1 {
+  font-size: 48px;
+  margin-bottom: 30px;
+  color: #ffffff;
+  text-shadow: 0 0 15px #00ffd0;
+}
+
+.aceptar-btn {
+  padding: 12px 36px;
+  font-size: 18px;
+  font-weight: bold;
+  background: linear-gradient(to bottom, #00ffd0, #00c780);
+  border: none;
+  border-radius: 12px;
+  color: #003c32;
+  box-shadow: 0 0 10px #00ffd0;
+  cursor: pointer;
+}
+
+.cerrar-btn {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  background: #00ffd0;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #003c32;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00ffd0;
+}
+
+/* 🎞️ Animación de entrada */
+@keyframes popupEntrada {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+    box-shadow: 0 0 0 transparent;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 40px #00ffd0;
+  }
+}
+
+/* ✨ Pulso continuo del popup */
+@keyframes popupPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 30px #00ffd0;
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 60px #00ffd0;
+  }
+}
+
+/* ==================== LOGO SUPERIOR ATLANTIS ==================== */
+.logo-atlantis {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  animation: logoPulse 3s ease-in-out infinite;
+}
+
+.logo-atlantis img {
+  width: 200px;
+  max-width: 80vw;
+  /* Sin brillo ni animaciones */
+  filter: none;
+}
+
+
+body, html {
+  height: 100vh;
+  max-height: 100dvh; /* compatible con dispositivos móviles modernos */
+  overflow: hidden;
+}
+
+
+/* ✨ Animación de pulso */
+@keyframes logoPulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+.barra-superpuesta {
+  position: absolute;
+  top: 62%; /* 🔧 Ajustá este número según dónde quieras que aparezca */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  width: 80%;
+  max-width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
