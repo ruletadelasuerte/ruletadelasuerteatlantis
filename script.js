@@ -36,6 +36,7 @@ const sonidoGanador = document.getElementById("sonido-ganador");
 const hoy = new Date().toISOString().split("T")[0];
 let permitirReintento = false;
 let yaGiro = localStorage.getItem("ultimoGiro") === hoy;
+let ruletaGirando = false;
 
 // ------------------------ EFECTOS DE AUDIO ------------------------
 function fadeOut(audio, duration = 1000) {
@@ -78,6 +79,7 @@ function detectarPremioPorAngulo(angulo) {
 
 // ------------------------ BOTÓN DE GIRO ------------------------
 document.getElementById("girar-btn").addEventListener("click", () => {
+  if (ruletaGirando) return;
   if (yaGiro && !permitirReintento) {
     mostrarPopupAviso(); // 🌊 mensaje personalizado
     return;
@@ -87,49 +89,56 @@ document.getElementById("girar-btn").addEventListener("click", () => {
 
 // ------------------------ GIRO DE RULETA ------------------------
 function iniciarGiro() {
+  ruletaGirando = true;
   const premio = premios[Math.floor(Math.random() * premios.length)];
   const ruleta = document.getElementById("ruleta");
 
   fadeOut(musica);
-
+  
   sonidoRuleta.currentTime = 0;
   sonidoRuleta.volume = 0.7;
-
+  
   sonidoRuleta.play().then(() => {
     const duracion = sonidoRuleta.duration;
-    const tiempoRapido = Math.max(duracion - 4.8, 0);
-    const vueltasRapidas = 6 * tiempoRapido;
+  
+    // Dividimos el tiempo total en 70% rápido y 30% lento
+    const porcentajeRapido = 0.7;
+    const tiempoRapido = duracion * porcentajeRapido;
+    const tiempoLento = duracion * (1 - porcentajeRapido);
+  
+    // Cálculo de grados según duración
+    const vueltasRapidas = 6 * tiempoRapido; // vueltas por segundo
     const gradosRapidos = 360 * vueltasRapidas;
-    const gradosLentos = 720;
+    const gradosLentos = 720; // siempre al menos 2 vueltas
     const gradosFinales = gradosRapidos + gradosLentos + premio.angulo;
-
+  
     // Reset visual
     ruleta.style.transition = "none";
     ruleta.style.transform = "rotate(0deg)";
     void ruleta.offsetWidth;
-
+  
     // Giro rápido
     ruleta.style.transition = `transform ${tiempoRapido}s linear`;
     ruleta.style.transform = `rotate(${gradosRapidos}deg)`;
-
-    // Desaceleración
+  
+    // Giro lento (desaceleración)
     setTimeout(() => {
-      ruleta.style.transition = "transform 5s cubic-bezier(0.1, 0.9, 0.3, 1)";
+      ruleta.style.transition = `transform ${tiempoLento}s cubic-bezier(0.1, 0.9, 0.3, 1)`;
       ruleta.style.transform = `rotate(${gradosFinales}deg)`;
     }, tiempoRapido * 1000);
-
-    // Al terminar el sonido
-    sonidoRuleta.onended = () => {
-      // 🔊 Reproducir sonido de ganador (corregido)
+  
+    // Al finalizar todo el audio (duración total)
+    setTimeout(() => {
       if (sonidoGanador) {
         sonidoGanador.currentTime = 0;
         sonidoGanador.volume = 0.9;
         sonidoGanador.play().catch(() => {});
       }
-
+  
       const premioObtenido = detectarPremioPorAngulo(gradosFinales);
+      localStorage.setItem("premioObtenido", premioObtenido);
       mostrarPopup(premioObtenido);
-
+  
       if (premioObtenido === "OTRO GIRO") {
         permitirReintento = true;
       } else {
@@ -137,7 +146,10 @@ function iniciarGiro() {
         permitirReintento = false;
         yaGiro = true;
       }
-    };
+  
+      ruletaGirando = false;
+    }, duracion * 1000);
+  
   }).catch(err => {
     console.error("Error al reproducir el sonido de ruleta:", err);
   });
@@ -147,8 +159,24 @@ function iniciarGiro() {
 function mostrarPopup(premioObtenido) {
   const popup = document.getElementById("popup-premio");
   const texto = document.getElementById("texto-premio");
+  const fecha = document.getElementById("popup-fecha");
 
+  // 🎯 Texto del premio
   texto.textContent = premioObtenido;
+
+  // 🕒 Mostrar fecha y hora actual
+  const ahora = new Date();
+  const fechaStr = ahora.toLocaleString('es-AR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+  fecha.textContent = fechaStr;
+
+  // 📦 Mostrar el popup
   popup.classList.remove("hidden");
 
   if (!sonidoRuleta.paused) {
@@ -161,12 +189,13 @@ function mostrarPopup(premioObtenido) {
   void popupBox.offsetWidth;
   popupBox.style.animation = "popupEntrada 0.5s ease-out, popupPulse 1.5s ease-in-out infinite";
 
+  // 🎉 Confetti
   confetti({
     particleCount: 150,
     spread: 90,
     startVelocity: 45,
     origin: { y: 0.6 },
-    colors: ['#00ffd0', '#00c780', '#ffffff'],
+    colors: ['#FFD700', '#000000', '#FFFFFF', '#C0C0C0'], // dorado, negro, blanco, plata
     zIndex: 1000
   });
 }
@@ -180,8 +209,21 @@ function cerrarPopup() {
 // ------------------------ MOSTRAR POPUP AVISO 🌊 ------------------------
 function mostrarPopupAviso() {
   const popup = document.getElementById("popup-aviso");
-  popup.classList.remove("hidden");
+  const mensaje = document.getElementById("mensaje-aviso");
 
+  // Obtener premio y fecha del localStorage o definir por defecto
+  const premio = localStorage.getItem("premioObtenido") || "un premio";
+  const fechaHoy = new Date().toLocaleDateString('es-AR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
+  // Insertar el mensaje personalizado
+  mensaje.innerHTML = `¡Hola!<br>Hoy ${fechaHoy} ya ganaste <strong>${premio}</strong>.<br>Volvé mañana y probamos suerte de nuevo 🎲`;
+
+  // Mostrar el popup con animación
+  popup.classList.remove("hidden");
   const popupBox = popup.querySelector(".popup");
   popupBox.style.animation = "none";
   void popupBox.offsetWidth;
@@ -192,3 +234,4 @@ function mostrarPopupAviso() {
 function cerrarPopupAviso() {
   document.getElementById("popup-aviso").classList.add("hidden");
 }
+
