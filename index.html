@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ruleta Atlantis</title>
+  <title>Ruleta Club Eros</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
@@ -29,7 +29,6 @@
     <div class="content">
       <!-- Logo ATLANTIS PLAY + tridente -->
       <div class="logo-container">
-        <img src="assets/tridente.png" alt="Tridente" class="tridente"/>
         <img src="assets/logo.png" alt="Atlantis Play" class="atlantis"/>
       </div>
     </div>
@@ -47,12 +46,14 @@
       <img src="assets/flecha.png" class="puntero animado" alt="Puntero">
     </div>
 
-    <button id="girar-btn">GIRAR</button>
+    <img src="assets/boton-girar.png" id="girar-btn" alt="Girar" class="boton-girar" />
   </div>
 
   <!-- POPUP DE PREMIO -->
   <div id="popup-premio" class="popup-container hidden">
     <div class="popup">
+      <!-- ⏱️ Fecha y hora -->
+      <div class="popup-fecha" id="popup-fecha"></div>
       <button class="cerrar-btn" onclick="cerrarPopup()">X</button>
       <h2>¡GANASTE!</h2>
       <h1 id="texto-premio">BONO 200%</h1>
@@ -60,12 +61,11 @@
     </div>
   </div>
 
-  <!-- POPUP DE AVISO 🌊 -->
+  <!-- POPUP DE AVISO 🎲 -->
   <div id="popup-aviso" class="popup-container hidden">
     <div class="popup">
       <button class="cerrar-btn" onclick="cerrarPopupAviso()">X</button>
-      <h2>¡Hola!</h2>
-      <h1 style="font-size: 20px;">Ya usaste tu oportunidad.<br>Volvé mañana🌊</h1>
+      <div id="mensaje-aviso" class="popup-aviso-texto"></div>
       <button class="aceptar-btn" onclick="cerrarPopupAviso()">Aceptar</button>
     </div>
   </div>
