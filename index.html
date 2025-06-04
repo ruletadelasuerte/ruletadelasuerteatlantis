@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ruleta Altantis</title>
+  <title>Ruleta Atlantis</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
@@ -29,6 +29,7 @@
     <div class="content">
       <!-- Logo ATLANTIS PLAY + tridente -->
       <div class="logo-container">
+        <img src="assets/tridente.png" alt="Tridente" class="tridente"/>
         <img src="assets/logo.png" alt="Atlantis Play" class="atlantis"/>
       </div>
     </div>
@@ -46,7 +47,7 @@
       <img src="assets/flecha.png" class="puntero animado" alt="Puntero">
     </div>
 
-    <img src="assets/boton-girar.png" id="girar-btn" alt="Girar" class="boton-girar" />
+    <button id="girar-btn">GIRAR</button>
   </div>
 
   <!-- POPUP DE PREMIO -->
@@ -59,7 +60,7 @@
       <h1 id="texto-premio">BONO 200%</h1>
       <button class="aceptar-btn" onclick="cerrarPopup()">ACEPTAR</button>
     </div>
-  </div>
+  </div>>
 
   <!-- POPUP DE AVISO 🎲 -->
   <div id="popup-aviso" class="popup-container hidden">
