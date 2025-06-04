@@ -398,3 +398,23 @@ body, html {
   align-items: center;
   pointer-events: none;
 }
+
+.popup-aviso-texto {
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  text-shadow: 0 0 4px #00FFF7, 0 0 10px #00BFA6; /* efecto glow frío */
+}
+
+.popup-fecha {
+  position: absolute;
+  top: 12px;
+  left: 15px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #00FFF7;
+  text-shadow: 0 0 4px #000, 0 0 8px #00E6CC;
+}
